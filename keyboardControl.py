@@ -18,7 +18,7 @@ ENA = 16
 ENB = 13
 
 GPIO.setmode(GPIO.BCM)
-#GPIO.setwarnings(True)
+GPIO.setwarnings(False)
 
 
 def motor_init():
@@ -128,6 +128,12 @@ while key != ord("q"):
 
 curses.endwin()
 
+GPIO.setup(ENA,GPIO.LOW)
+GPIO.setup(IN1,GPIO.LOW)
+GPIO.setup(IN2,GPIO.LOW)
+GPIO.setup(ENB,GPIO.LOW)
+GPIO.setup(IN3,GPIO.LOW)
+GPIO.setup(IN4,GPIO.LOW)
 # normal
 
 
