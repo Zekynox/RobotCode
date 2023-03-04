@@ -16,6 +16,7 @@ curses.noecho()
 curses.curs_set(0)
 stdscr.keypad(True)
 stdscr.addstr(0,10,"Hit 'q' to quit")
+stdscr.addstr(1,10,"Hit SPACEBAR to stop tank")
 stdscr.refresh()
 key = ""
 PWMSleep = 0.03
@@ -54,7 +55,6 @@ def forward(speed):
     GPIO.output(IN2, GPIO.LOW)
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)
-    #PWM duty cycle is set to 100（0--100）
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
     time.sleep(PWMSleep)
@@ -65,7 +65,6 @@ def backward(speed):
     GPIO.output(IN2, GPIO.HIGH)
     GPIO.output(IN3, GPIO.LOW)
     GPIO.output(IN4, GPIO.HIGH)
-    #PWM duty cycle is set to 100（0--100）
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
     time.sleep(PWMSleep)
@@ -76,7 +75,6 @@ def right(speed):
     GPIO.output(IN2, GPIO.LOW)
     GPIO.output(IN3, GPIO.LOW)
     GPIO.output(IN4, GPIO.HIGH)
-    #PWM duty cycle is set to 100（0--100）
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
     time.sleep(PWMSleep)
@@ -87,7 +85,6 @@ def left(speed):
     GPIO.output(IN2, GPIO.HIGH)
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)
-    #PWM duty cycle is set to 100（0--100）
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
     time.sleep(PWMSleep)
@@ -127,14 +124,17 @@ if not move_tank:
 last_key = 0
 while key != ord("q"):
     key = stdscr.getch()
+    if key < 0:
+        continue
     # display key
-    if key != last_key and key >= 0:
+    if key != last_key:
         last_key = key
         if key == ord(" "):
             # clear the key display
             stdscr.addstr(2, 25, " " * 15)
+            stdscr.addstr(9, 5, " " * 10)
         else:
-            stdscr.addch(2,25,key)
+            stdscr.addch(2,25, key)
             stdscr.addstr(2, 30, f"key : {key}")
         stdscr.refresh()
     if not move_tank:
@@ -142,7 +142,7 @@ while key != ord("q"):
 
     # move the tank
     try:
-        if key < 0:
+        if key == 32:
             pwm_ENA.start(0)
             pwm_ENB.start(0)
         else:
