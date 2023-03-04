@@ -1,9 +1,19 @@
 import curses
 import time
-import RPi.GPIO as GPIO
+import sys
 
+if len(sys.argv) == 2 and sys.argv[1].lower() == "ui":
+    move_tank = False
+else:
+    try:
+        import RPi.GPIO as GPIO
+        move_tank = True
+    except:
+        pass
 stdscr = curses.initscr()
 curses.cbreak()
+curses.noecho()
+curses.curs_set(0)
 stdscr.keypad(True)
 stdscr.addstr(0,10,"Hit 'q' to quit")
 stdscr.refresh()
@@ -17,8 +27,9 @@ IN4 = 26
 ENA = 16
 ENB = 13
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+if move_tank:
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
 
 
 def motor_init():
@@ -106,34 +117,48 @@ def A():
 def D():
     pass 
 
-motor_init()
+if move_tank:
+    motor_init()
+
 stdscr.nodelay(True)
+if not move_tank:
+    stdscr.addstr(7, 10, "UI only")
+
+last_key = 0
 while key != ord("q"):
     key = stdscr.getch()
-    if key < 0:
-        pwm_ENA.start(0)
-        pwm_ENB.start(0)
+    # display key
+    if key != last_key and key >= 0:
+        last_key = key
+        if key == ord(" "):
+            # clear the key display
+            stdscr.addstr(2, 25, " " * 15)
+        else:
+            stdscr.addch(2,25,key)
+            stdscr.addstr(2, 30, f"key : {key}")
+        stdscr.refresh()
+    if not move_tank:
         continue
-    stdscr.addch(2,25,key)
-    stdscr.addstr(2, 30, f"key : {key}")
-    stdscr.refresh()
+
+    # move the tank
     try:
-        eval(f"{chr(key)}()")
+        if key < 0:
+            pwm_ENA.start(0)
+            pwm_ENB.start(0)
+        else:
+            eval(f"{chr(key)}()")
     except NameError as e:
         stdscr.addstr(7, 10, "Bad Press")
-    if key == curses.KEY_UP:
-        stdscr.addstr(4, 20, "Up")
-    elif key == curses.KEY_DOWN:
-        stdscr.addstr(5, 20, "Down")
 
 curses.endwin()
 
-GPIO.setup(ENA,GPIO.LOW)
-GPIO.setup(IN1,GPIO.LOW)
-GPIO.setup(IN2,GPIO.LOW)
-GPIO.setup(ENB,GPIO.LOW)
-GPIO.setup(IN3,GPIO.LOW)
-GPIO.setup(IN4,GPIO.LOW)
+if move_tank:
+    GPIO.setup(ENA,GPIO.LOW)
+    GPIO.setup(IN1,GPIO.LOW)
+    GPIO.setup(IN2,GPIO.LOW)
+    GPIO.setup(ENB,GPIO.LOW)
+    GPIO.setup(IN3,GPIO.LOW)
+    GPIO.setup(IN4,GPIO.LOW)
 # normal
 
 
