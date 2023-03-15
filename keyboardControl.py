@@ -87,8 +87,20 @@ def left(speed):
     GPIO.output(IN4, GPIO.LOW)
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
-    time.sleep(PWMSleep)
+    #time.sleep(PWMSleep)
+    
+def wanderReturn(speed):
+    forward(speed)
+    time.sleep(1)
+    left(100)
+    time.sleep(1.27)
+    #left(50)
+    #time.sleep(1.28)
+    forward(speed)
+    time.sleep(1)
+    motor_init()
 
+# speed(robot messurment)*time(seconds) = degrees r = 2.88
 def w():
     forward(50)
     
@@ -113,6 +125,9 @@ def A():
 
 def D():
     pass 
+
+def o():
+    wanderReturn(20)
 
 if move_tank:
     motor_init()
