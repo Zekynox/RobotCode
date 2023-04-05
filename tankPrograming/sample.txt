@@ -5,11 +5,11 @@
 # d = turn right
 #action speed time
 w 20 2
-d 10 1
+d 100 1
 w 20 2
-d 10 1
+d 100 1
 w 20 2
-d 10 1
+d 10 1000001
 w 20 2
 d 10 1
 

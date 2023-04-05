@@ -21,6 +21,23 @@ for command in commands:
     
     else:
         action = findAction(command[0])
-        print(action)
-        #we could use <print(findAction(command[0]))>, but i have later use for action
+        speed = command[2]
+        timeAt = 4
+        
+        if command[3] != " ":
+            speed += command[3]
+            timeAt += 1
+            if command[4] != " ":
+                speed += command[4]
+                timeAt += 1
+                
+        time = command[timeAt]
+        timeAt += 1
+        
+        while command[timeAt] != " ":
+             timeAt += 1
+             time += command[timeAt]
+            
+        print(action + " at " + speed + " for " + time)
+        
         
