@@ -3,13 +3,13 @@
 # s = backward
 # a = turn left
 # d = turn right
-#action speed time
+#action speed seconds
 w 20 2
-d 100 1
+d 10 1
 w 20 2
-d 100 1
+d 10 1
 w 20 2
-d 10 1000001
+d 10 1
 w 20 2
 d 10 1
 
