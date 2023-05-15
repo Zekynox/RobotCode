@@ -4,6 +4,7 @@ import sys
 
 if len(sys.argv) == 2 and sys.argv[1].lower() == "ui":
     move_tank = False
+
 else:
     try:
         import RPi.GPIO as GPIO
