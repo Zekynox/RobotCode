@@ -19,6 +19,14 @@ IN4 = 26
 ENA = 16
 ENB = 13
 
+#Definition of RGB module pins
+LED_R = 22
+LED_G = 27
+LED_B = 24
+
+#Definition of servo pin
+ServoPin = 23
+
 pwm_ENA = pwm_ENB = None
 
 
@@ -85,6 +93,8 @@ def left(speed, timeAt):
     GPIO.output(IN4, GPIO.LOW)
     pwm_ENA.ChangeDutyCycle(speed)
     pwm_ENB.ChangeDutyCycle(speed)
+    
+
 
 
 def findAction(x):

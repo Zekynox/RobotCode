@@ -29,6 +29,15 @@ IN4 = 26
 ENA = 16
 ENB = 13
 
+#Definition of RGB module pins
+LED_R = 22
+LED_G = 27
+LED_B = 24
+
+#Definition of servo pin
+ServoPin = 23
+
+
 if move_tank:
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -48,6 +57,16 @@ def motor_init():
     pwm_ENB = GPIO.PWM(ENB, 2000)
     pwm_ENA.start(0)
     pwm_ENB.start(0)
+    #set up servo
+    global pwm_servo
+    GPIO.setup(LED_R, GPIO.OUT)
+    GPIO.setup(LED_G, GPIO.OUT)
+    GPIO.setup(LED_B, GPIO.OUT)
+    GPIO.setup(ServoPin, GPIO.OUT)
+
+    pwm_servo = GPIO.PWM(ServoPin, 50)
+    pwm_servo.start(0)
+
     
     
 def forward(speed): 
@@ -101,6 +120,11 @@ def wanderReturn(speed):
     time.sleep(1)
     motor_init()
 
+def lights(servo, r, g, b):
+    stdscr.addstr(9, 5, "lights")
+    pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
+    
+
 # speed(robot messurment)*time(seconds) = degrees r = 2.88
 def w():
     forward(50)
@@ -129,6 +153,9 @@ def D():
 
 def o():
     wanderReturn(20)
+
+def l():
+    lights(50, 1, 0, 0)
 
 if move_tank:
     motor_init()
