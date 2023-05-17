@@ -21,6 +21,7 @@ stdscr.addstr(1,10,"Hit SPACEBAR to stop tank")
 stdscr.refresh()
 key = ""
 PWMSleep = 0.03
+lastAngle = 500
 
 IN1 = 20
 IN2 = 21
@@ -121,9 +122,19 @@ def wanderReturn(speed):
     motor_init()
 
 def lights(servo, r, g, b):
+    global lastAngle
     stdscr.addstr(9, 5, "lights")
-    pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
-    
+    if lastAngle != servo:
+        pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
+        lastAngle = servo
+        stdscr.addstr(10, 5, str(servo))
+        stdscr.refresh()
+    # GPIO.output(LED_R, r)
+    # GPIO.output(LED_G, g)
+    # GPIO.output(LED_B, b)
+    time.sleep(2)
+    stdscr.addstr(10, 5, "             ")
+
 
 # speed(robot messurment)*time(seconds) = degrees r = 2.88
 def w():
@@ -191,8 +202,8 @@ while key != ord("q"):
         else:
             eval(f"{chr(key)}()")
     except NameError as e:
-        stdscr.addstr(7, 10, "Bad Press")
-
+        stdscr.addstr(7, 10, "Bad Press " + str(key) )
+        print(e)
 curses.endwin()
 
 if move_tank:
