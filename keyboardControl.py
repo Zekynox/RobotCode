@@ -125,7 +125,7 @@ def lights(servo, r, g, b):
     global lastAngle
     stdscr.addstr(9, 5, "lights")
     if lastAngle != servo:
-        pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
+        pwm_servo.start(2.5 + 10 * servo/180)
         lastAngle = servo
         stdscr.addstr(10, 5, str(servo))
         stdscr.refresh()
