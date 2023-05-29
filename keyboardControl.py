@@ -124,15 +124,14 @@ def wanderReturn(speed):
 def lights(servo, r, g, b):
     global lastAngle
     stdscr.addstr(9, 5, "lights")
-    if lastAngle != servo:
-        pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
-        lastAngle = servo
-        stdscr.addstr(10, 5, str(servo))
-        stdscr.refresh()
-    # GPIO.output(LED_R, r)
-    # GPIO.output(LED_G, g)
-    # GPIO.output(LED_B, b)
-    time.sleep(2)
+    pwm_servo.ChangeDutyCycle(2.5 + 10 * servo/180)
+    lastAngle = servo
+    stdscr.addstr(10, 5, str(servo))
+    stdscr.refresh()
+    GPIO.output(LED_R, r)
+    GPIO.output(LED_G, g)
+    GPIO.output(LED_B, b)
+    time.sleep(0.2)
     stdscr.addstr(10, 5, "             ")
 
 
@@ -166,7 +165,7 @@ def o():
     wanderReturn(20)
 
 def l():
-    lights(50, 1, 0, 0)
+    lights(78, 1, 0, 0)
 
 if move_tank:
     motor_init()
